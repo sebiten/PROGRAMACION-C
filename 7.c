@@ -14,4 +14,3 @@ int main(int argc, char const *argv[])
     printf("El promedio de estatura es: %.2f metros\n", promedioEstatura);
     return 0;
 }
-// Ejercicio 7:  Dados tres números reales correspondientes a las estaturas de tres estudiantes, calcular e informar la estatura promedio.
