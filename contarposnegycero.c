@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdio.h> 
 int main(void) {
     int n, nro;
     int count0 = 0, countPos = 0, countNeg = 0;
