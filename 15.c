@@ -13,28 +13,18 @@ int main(void)
     {
         printf("Ingrese el %d nro: ", i + 1);
         scanf("%d", &nro);
-
-        if (nro == 0)
+        aux = nro;
+        b = 0;
+        while (aux > 0)
         {
-            // Caso especial: 0 cuenta como todos pares
-            b = 0;
-        }
-        else
-        {
-            aux = nro;
-            b = 0; // arranca suponiendo válido
-            while (aux > 0)
+            dig = aux % 10;
+            if (dig % 2 != 0)
             {
-                dig = aux % 10;
-                if (dig % 2 != 0)
-                {
-                    b = 1; // bandera de "hay impar"
-                    break; // no sigo revisando
-                }
-                aux = aux / 10;
+                b = 1; // bandera de "hay impar"
+                break;
             }
+            aux = aux / 10;
         }
-
         if (b == 0)
         {
             printf("El nro %d tiene todos sus dig pares \n", nro);
