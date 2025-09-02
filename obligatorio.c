@@ -27,11 +27,8 @@ int main(void)
             ganador = dni;
         }
     }
-
     if (count == 0)
-    {
         printf("Nadie gana el premio.\n");
-    }
     else if (count == 1)
     {
         printf("El ganador es el DNI: %d (terminacion %03d)\n", ganador, k);
