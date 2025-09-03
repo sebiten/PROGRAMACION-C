@@ -1,13 +1,11 @@
 #include <stdio.h>
 
-int main()
+int main(void)
 {
-    int K;
-    printf("Ingrese un número: ");
-
-    scanf("%d", &K);
-
-    for (int n = 2; n <= K; n++) // n= 2,3,4,5,6,7,etc..
+    int numero = 377, 
+    nro = numero;
+    int dig = numero % 10;
+    for (int n = 2; n < nro; n++) // n= 2,3,4,5,6,7,etc..
     {
         int esPrimo = 1;
         for (int i = 2; i * i <= n; i++) // i=2,3,4,5,6,7,8,etc...
@@ -24,5 +22,6 @@ int main()
         }
     }
 
+    numero /= 10;
     return 0;
 }

@@ -1,60 +1,48 @@
 #include <stdio.h>
-// Dada una lista de números naturales, se pide contabilizar cuántos de ellos son capicúas  e indicar los capicúas que están formados sólo por dígitos impares.
-int esCapicua(int num)
-{
-    int inverso = 0, original = num;
-    while (num > 0)
-    {
-        inverso = inverso * 10 + num % 10;
-        num /= 10;
-    }
-    return inverso == original;
-}
-int soloImpares(int num)
-{
-    while (num > 0)
-    {
-        int digito = num % 10;
-        if (digito % 2 == 0)
-            return 0;
-        num /= 10;
-    }
-    return 1;
-}
+
 int main()
 {
-    int n, numero;
+    int numero;
     int contadorCapicuas = 0;
-
-    printf("Ingrese la cantidad de números: ");
-    scanf("%d", &n);
-
-    printf("Ingrese los números:\n");
-    for (int i = 0; i < n; i++)
+    printf("Ingrese números naturales (corte con 0 o -1):\n");
+    do
     {
         scanf("%d", &numero);
-        if (esCapicua(numero))
+        if (numero <= 0)
+            break;
+        int original = numero,
+            num = numero,
+            inverso = 0;
+        while (num > 0)
+        {
+            inverso = inverso * 10 + num % 10;
+            num /= 10;
+        }
+        if (inverso == original)
         {
             contadorCapicuas++;
-            if (soloImpares(numero))
+
+            int soloImpares = 1,
+                temp = original;
+            while (temp > 0)
             {
-                printf("Capicúa solo con dígitos impares: %d\n", numero);
+                int digito = temp % 10;
+                if (digito % 2 == 0)
+                {
+                    soloImpares = 0;
+                    break;
+                }
+                temp /= 10;
+            }
+
+            if (soloImpares)
+            {
+                printf("Capicúa solo con dígitos impares: %d\n", original);
             }
         }
-    }
+    } while (numero > 0);
 
     printf("Cantidad de capicúas: %d\n", contadorCapicuas);
 
     return 0;
 }
-// Ejemplo de entrada:
-// 5
-// 121
-// 12321
-// 13531
-// 24642
-// 12345
-// Ejemplo de salida:
-// Capicúa solo con dígitos impares: 13531
-// Cantidad de capicúas: 3
-// Explicación: En el ejemplo, hay tres números capicúas (121, 12321, 13531), pero solo uno de ellos (13531) está formado únicamente por dígitos impares.
