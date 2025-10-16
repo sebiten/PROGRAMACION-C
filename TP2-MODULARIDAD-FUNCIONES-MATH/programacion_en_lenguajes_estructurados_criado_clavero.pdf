@@ -1,0 +1,18 @@
+#include <stdio.h>
+
+void sumar(int a);   // recibe una copia de 'a'
+int main() {
+	int a;
+	printf("Ingrese a: ");
+	scanf("%d", &a);
+	
+	sumar(a); // le paso el valor
+	printf("\nEn main, a sigue valiendo: %d\n", a);
+	
+	return 0;
+}
+void sumar(int a) {
+	int b = 10;
+	int total = a + b;
+	printf("La suma en total es: %d", total);
+}
