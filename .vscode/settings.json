@@ -63,6 +63,7 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
-    "7.C": "cpp"
+    "7.C": "cpp",
+    "10.C": "cpp"
   }
 }
