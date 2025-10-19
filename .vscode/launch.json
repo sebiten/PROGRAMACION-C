@@ -28,8 +28,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Sebastian/Desktop/PROGRAMACION-C",
-      "program": "c:/Users/Sebastian/Desktop/PROGRAMACION-C/build/Debug/outDebug",
+      "cwd": "c:/Users/Sebastian/Desktop/PROGRAMACION-C/.vscode",
+      "program": "c:/Users/Sebastian/Desktop/PROGRAMACION-C/.vscode/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
