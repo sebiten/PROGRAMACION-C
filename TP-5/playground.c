@@ -1,14 +1,36 @@
 #include <stdio.h>
 #include <string.h>
-#define TAM 100
-typedef char tCad[TAM];
-typedef tCad tVecCad[TAM];
+#define tam 20
+#define tamV 50
+
+typedef char tCad[tam];
+typedef tCad tVector[tamV];
+
+void leeCad(tCad, int);
+void carga_lista(tVector, int);
+void muestra_lista(tVector, int);
+void ordenar(tVector, int);
+
+int main() {
+  int N;
+  tVector CIUDADES;
+
+  printf("Ingrese cantidad de ciudades: ");
+  scanf("%d", &N);
+  getchar();  // limpia el salto de línea
+
+  carga_lista(CIUDADES, N);
+  muestra_lista(CIUDADES, N);
+  ordenar(CIUDADES, N);
+
+  printf("\n\n--- Lista ordenada ---\n");
+  muestra_lista(CIUDADES, N);
+  return 0;
+}
 
 void leeCad(tCad cad, int t) {
-  int j;
-  char c;
-  j = 0;
-  c = getchar();
+  int j = 0;
+  char c = getchar();
   while (c != EOF && c != '\n' && j < t - 1) {
     cad[j] = c;
     j++;
@@ -17,37 +39,29 @@ void leeCad(tCad cad, int t) {
   cad[j] = '\0';
   while (c != EOF && c != '\n') c = getchar();
 }
-// Prototipos
-void ingreso_Ordenado(tVecCad V, int n);
 
-int main(void) {
-  tVecCad saludos;
-  int n, i;
-  // Ahora un vector de saludos
-  printf("¿Cuántos saludos desea ingresar? ");
-  scanf("%d", &n);
-  fflush(stdin);
-  for (i = 0; i < n; i++) {
-    printf("Ingrese saludo %d: ", i + 1);
-    leeCad(saludos[i], TAM);
+void carga_lista(tVector V, int t) {
+  int i;
+  for (i = 1; i <= t; i++) {
+    printf("Ingrese ciudad %d: ", i);
+    fflush(stdin);  // aceptado en UNSa
+    leeCad(V[i], tam);
   }
-  printf("\nLos saludos ingresados son:\n");
-  for (i = 0; i < n; i++) {
-    printf("%s\n", saludos[i]);
-  }
-
-  return 0;
 }
-void ingreso_Ordenado(tVecCad V, int n) {
+
+void muestra_lista(tVector V, int t) {
+  int i;
+  for (i = 1; i <= t; i++) printf("%s\n", V[i]);
+}
+
+void ordenar(tVector V, int t) {
   int i, j;
   tCad aux;
-  for (i = 1; i < n; i++) {
-    strcpy(aux, V[i]);
-    j = i - 1;
-    while (j >= 0 && strcmp(V[j], aux) > 0) {
-      strcpy(V[j + 1], V[j]);
-      j--;
-    }
-    strcpy(V[j + 1], aux);
-  }
+  for (i = 1; i < t; i++)
+    for (j = i + 1; j <= t; j++)
+      if (strcmp(V[i], V[j]) > 0) {  // corrección
+        strcpy(aux, V[i]);
+        strcpy(V[i], V[j]);
+        strcpy(V[j], aux);
+      }
 }
