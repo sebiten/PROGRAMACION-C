@@ -1,94 +1,132 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef char tCad[30];
-typedef tCad tVecCad[100];
-typedef int tVecInt[100];
+#define TAM 100  // tamaño máximo de vectores
 
-// Prototipos
-void leeCad(tCad, int);
-void cargarClientesOrdenado(tVecCad, tVecCad, tVecCad, tVecInt, int);
-void mismaEdad(tVecCad, tVecCad, tVecCad, tVecInt, int, int);
-void eliminarPorCiudad(tVecCad, tVecCad, tVecCad, tVecInt, int*, tCad);
-int main(void) {
+// ==== Tipos definidos ====
+typedef char tCad[30];
+typedef tCad tVecCad[TAM];
+typedef int tVecInt[TAM];
+
+// ==== Prototipos de funciones ====
+void leerCad(tCad cad, int t);
+void ingresoOrdenado(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                     tVecInt Edades, int* n);
+void mostrarLista(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                  tVecInt Edades, int n);
+void mostrarPorEdad(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                    tVecInt Edades, int n, int edadBuscada);
+void eliminarPorCiudad(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                       tVecInt Edades, int* n, tCad ciudadBuscada);
+void agregarCliente(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                    tVecInt Edades, int* n);
+void buscarPorNombre(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                     tVecInt Edades, int n, tCad apellidoBuscado,
+                     tCad nombreBuscado);
+
+// ==== Función principal ====
+int main() {
   tVecCad Apellidos, Nombres, Ciudades;
   tVecInt Edades;
-  int n;  // cantidad de clientes
-  int op;
+  int n = 0, op;
+  int edadBuscada;
+  tCad ciudadBuscada, apellidoBuscado, nombreBuscado;
 
-  printf("Ingrese N (cantidad de clientes): ");
-  scanf("%d", &n);
-  getchar();  // limpiar salto de línea
-
-  cargarClientesOrdenado(Apellidos, Nombres, Ciudades, Edades, n);
   do {
-    printf("\n=== MENU DE OPCIONES ===\n");
-    printf("1. Mostrar todos los clientes con la misma edad\n");
-    printf("2. Eliminar todos los clientes de una ciudad\n");
-    printf("3. Agregar un nuevo cliente manteniendo el orden\n");
-    printf("4. Buscar cliente por apellido y nombre\n");
-    printf("5. Mostrar todos los clientes\n");
+    printf("\n=== MENU AGENDA ===\n");
+    printf("1. Ingresar clientes ordenados por Apellido y Nombre\n");
+    printf("2. Mostrar lista completa\n");
+    printf("3. Mostrar clientes con una edad dada\n");
+    printf("4. Eliminar clientes por ciudad\n");
+    printf("5. Agregar nuevo cliente (manteniendo orden)\n");
+    printf("6. Buscar cliente por Apellido y Nombre\n");
     printf("0. Salir\n");
     printf("Opcion: ");
     scanf("%d", &op);
-    getchar();
+    getchar();  // limpia salto de línea
 
     switch (op) {
       case 1:
-        printf("ingrese la edad a buscar: ");
-        int edadBuscada;
-        scanf("%d", &edadBuscada);
-        getchar();
-        mismaEdad(Apellidos, Nombres, Ciudades, Edades, n, edadBuscada);
+        ingresoOrdenado(Apellidos, Nombres, Ciudades, Edades, &n);
         break;
       case 2:
-        printf("ingrese la ciudad a eliminar: ");
-        int ciudadAeliminar;
-        leeCad(ciudadAeliminar, 30);
+        mostrarLista(Apellidos, Nombres, Ciudades, Edades, n);
+        break;
+      case 3:
+        printf("Ingrese la edad a buscar: ");
+        scanf("%d", &edadBuscada);
         getchar();
-        eliminarPorCiudad(Apellidos, Nombres, Ciudades, Edades, n,
-                          ciudadAeliminar);
+        mostrarPorEdad(Apellidos, Nombres, Ciudades, Edades, n, edadBuscada);
+        break;
+      case 4:
+        printf("Ingrese la ciudad a eliminar: ");
+        leerCad(ciudadBuscada, 30);
+        eliminarPorCiudad(Apellidos, Nombres, Ciudades, Edades, &n,
+                          ciudadBuscada);
+        break;
+      case 5:
+        agregarCliente(Apellidos, Nombres, Ciudades, Edades, &n);
+        break;
+      case 6:
+        printf("Apellido: ");
+        leerCad(apellidoBuscado, 30);
+        printf("Nombre: ");
+        leerCad(nombreBuscado, 30);
+        buscarPorNombre(Apellidos, Nombres, Ciudades, Edades, n,
+                        apellidoBuscado, nombreBuscado);
+        break;
       case 0:
         printf("Fin del programa.\n");
         break;
       default:
-        printf("Opcion aun no implementada.\n");
+        printf("Opcion invalida.\n");
     }
   } while (op != 0);
 
   return 0;
 }
 
-void leeCad(tCad cad, int t) {
-  int j = 0;
+// ==== Funciones auxiliares ====
+
+void leerCad(tCad cad, int t) {
+  int i = 0;
   char c = getchar();
-  while (c != EOF && c != '\n' && j < t - 1) {
-    cad[j++] = c;
+  while (c != '\n' && c != EOF && i < t - 1) {
+    cad[i] = c;
+    i++;
     c = getchar();
   }
-  cad[j] = '\0';
-  while (c != EOF && c != '\n') c = getchar();
+  cad[i] = '\0';
 }
-void cargarClientesOrdenado(tVecCad Apellidos, tVecCad Nombres,
-                            tVecCad Ciudades, tVecInt Edades, int n) {
-  int i, j;
-  tCad ap, nom, ciu;
-  int edad;
 
-  for (i = 1; i <= n; i++) {
-    printf("\n=== CLIENTE %d ===\n", i + 1);
+// Inserta clientes ordenados por Apellido y Nombre a medida que se ingresan
+void ingresoOrdenado(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                     tVecInt Edades, int* n) {
+  int cant, i, j;
+  tCad apeAux, nomAux, ciuAux;
+  int edadAux;
+
+  printf("Cuantos clientes desea ingresar? ");
+  scanf("%d", &cant);
+  getchar();
+
+  for (i = 0; i < cant; i++) {
+    printf("\nCliente %d\n", i + 1);
     printf("Apellido: ");
-    leeCad(ap, 30);
+    leerCad(apeAux, 30);
     printf("Nombre: ");
-    leeCad(nom, 30);
-    printf("Ciudad: ");
-    leeCad(ciu, 30);
+    leerCad(nomAux, 30);
+    printf("Ciudad de nacimiento: ");
+    leerCad(ciuAux, 30);
     printf("Edad: ");
-    scanf("%d", &edad);
+    scanf("%d", &edadAux);
     getchar();
-    // Buscamos posición para insertar (manteniendo orden)
-    j = i - 1;
-    while (j >= 0 && strcmp(ap, Apellidos[j]) < 0) {
+
+    // Insertar ordenado por apellido y nombre
+    j = *n - 1;
+    while (j >= 0 && (strcmp(Apellidos[j], apeAux) > 0 ||
+                      (strcmp(Apellidos[j], apeAux) == 0 &&
+                       strcmp(Nombres[j], nomAux) > 0))) {
       strcpy(Apellidos[j + 1], Apellidos[j]);
       strcpy(Nombres[j + 1], Nombres[j]);
       strcpy(Ciudades[j + 1], Ciudades[j]);
@@ -96,54 +134,101 @@ void cargarClientesOrdenado(tVecCad Apellidos, tVecCad Nombres,
       j--;
     }
 
-    // Si apellidos iguales, comparar nombres
-    while (j >= 0 && strcmp(ap, Apellidos[j]) == 0 &&
-           strcmp(nom, Nombres[j]) < 0) {
-      strcpy(Apellidos[j + 1], Apellidos[j]);
-      strcpy(Nombres[j + 1], Nombres[j]);
-      strcpy(Ciudades[j + 1], Ciudades[j]);
-      Edades[j + 1] = Edades[j];
-      j--;
-    }
-
-    // Insertar cliente en posición correcta
-    strcpy(Apellidos[j + 1], ap);
-    strcpy(Nombres[j + 1], nom);
-    strcpy(Ciudades[j + 1], ciu);
-    Edades[j + 1] = edad;
+    strcpy(Apellidos[j + 1], apeAux);
+    strcpy(Nombres[j + 1], nomAux);
+    strcpy(Ciudades[j + 1], ciuAux);
+    Edades[j + 1] = edadAux;
+    (*n)++;
   }
 }
 
-void mismaEdad(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
-               tVecInt Edades, int n, int edadBuscada) {
+void mostrarLista(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                  tVecInt Edades, int n) {
   int i;
-  for (i = 1; i <= n; i++) {
+  printf("\n=== LISTA DE CLIENTES ===\n");
+  for (i = 0; i < n; i++) {
+    printf("%s, %s - %s - %d anios\n", Apellidos[i], Nombres[i], Ciudades[i],
+           Edades[i]);
+  }
+}
+
+void mostrarPorEdad(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                    tVecInt Edades, int n, int edadBuscada) {
+  int i, encontrado = 0;
+  printf("\nClientes con edad %d:\n", edadBuscada);
+  for (i = 0; i < n; i++) {
     if (Edades[i] == edadBuscada) {
-      printf("\nCliente %d:\n", i + 1);
-      printf("  Apellido: %s\n", Apellidos[i]);
-      printf("  Nombre:   %s\n", Nombres[i]);
-      printf("  Ciudad:   %s\n", Ciudades[i]);
-      printf("  Edad:     %d años\n", Edades[i]);
+      printf("%s, %s - %s\n", Apellidos[i], Nombres[i], Ciudades[i]);
+      encontrado = 1;
     }
   }
+  if (!encontrado) printf("No hay clientes con esa edad.\n");
 }
 
 void eliminarPorCiudad(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
-                       tVecInt Edades, int* n, tCad ciudadAeliminar) {
+                       tVecInt Edades, int* n, tCad ciudadBuscada) {
   int i, j;
-
   for (i = 0; i < *n; i++) {
-    if (strcmp(Ciudades[i], ciudadAeliminar) == 0) {
-      // Desplazar hacia arriba todos los elementos siguientes
+    if (strcmp(Ciudades[i], ciudadBuscada) == 0) {
+      // correr todos una posición hacia atrás
       for (j = i; j < *n - 1; j++) {
         strcpy(Apellidos[j], Apellidos[j + 1]);
         strcpy(Nombres[j], Nombres[j + 1]);
         strcpy(Ciudades[j], Ciudades[j + 1]);
         Edades[j] = Edades[j + 1];
       }
-      (*n)--;  // hay un elemento menos
-      i--;     // 👈 volver una posición atrás para revisar el nuevo elemento
-               // movido
+      (*n)--;
+      i--;  // volver a verificar esta posición (porque corrió)
     }
   }
+  printf("Clientes de %s eliminados.\n", ciudadBuscada);
+}
+
+void agregarCliente(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                    tVecInt Edades, int* n) {
+  tCad apeAux, nomAux, ciuAux;
+  int edadAux, j;
+
+  printf("Apellido: ");
+  leerCad(apeAux, 30);
+  printf("Nombre: ");
+  leerCad(nomAux, 30);
+  printf("Ciudad de nacimiento: ");
+  leerCad(ciuAux, 30);
+  printf("Edad: ");
+  scanf("%d", &edadAux);
+  getchar();
+
+  j = *n - 1;
+  while (j >= 0 && (strcmp(Apellidos[j], apeAux) > 0 ||
+                    (strcmp(Apellidos[j], apeAux) == 0 &&
+                     strcmp(Nombres[j], nomAux) > 0))) {
+    strcpy(Apellidos[j + 1], Apellidos[j]);
+    strcpy(Nombres[j + 1], Nombres[j]);
+    strcpy(Ciudades[j + 1], Ciudades[j]);
+    Edades[j + 1] = Edades[j];
+    j--;
+  }
+  strcpy(Apellidos[j + 1], apeAux);
+  strcpy(Nombres[j + 1], nomAux);
+  strcpy(Ciudades[j + 1], ciuAux);
+  Edades[j + 1] = edadAux;
+  (*n)++;
+
+  printf("Cliente agregado correctamente.\n");
+}
+
+void buscarPorNombre(tVecCad Apellidos, tVecCad Nombres, tVecCad Ciudades,
+                     tVecInt Edades, int n, tCad apellidoBuscado,
+                     tCad nombreBuscado) {
+  int i, encontrado = 0;
+  for (i = 0; i < n; i++) {
+    if (strcmp(Apellidos[i], apellidoBuscado) == 0 &&
+        strcmp(Nombres[i], nombreBuscado) == 0) {
+      printf("Datos del cliente:\n");
+      printf("Ciudad: %s\nEdad: %d\n", Ciudades[i], Edades[i]);
+      encontrado = 1;
+    }
+  }
+  if (!encontrado) printf("No se encontro el cliente.\n");
 }
