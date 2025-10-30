@@ -44,7 +44,7 @@ void carga_lista(tVector V, int t) {
   int i;
   for (i = 1; i <= t; i++) {
     printf("Ingrese ciudad %d: ", i);
-    fflush(stdin);  // aceptado en UNSa
+    fflush(stdin); 
     leeCad(V[i], tam);
   }
 }
