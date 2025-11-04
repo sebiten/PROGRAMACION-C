@@ -1,7 +1,7 @@
-/*Ejercicio 10: Se tiene los datos de dos círculos. Estos datos son: el nombre, el punto central y el radio.
-Se solicita ingresar N puntos del plano e indicar, para cada punto, el círculo al cual el punto es interior, o
-si es exterior a ambos círculos.
-Nota: utilizar TD registro para representar cada círculo y cada punto. 
+/*Ejercicio 10: Se tiene los datos de dos cï¿½rculos. Estos datos son: el nombre, el punto central y el radio.
+Se solicita ingresar N puntos del plano e indicar, para cada punto, el cï¿½rculo al cual el punto es interior, o
+si es exterior a ambos cï¿½rculos.
+Nota: utilizar TD registro para representar cada cï¿½rculo y cada punto. 
 
 INTEGRANTES :
 Dino Fabrizio Veggiani
@@ -101,3 +101,5 @@ void pertenencia(TRCirculo c1,TRCirculo c2,TRPunto p){
 		else printf("\nEl punto es externo a ambos circulos");
 }
 /* 5 de 5 */
+
+
