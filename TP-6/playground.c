@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #define MAX 100
-typedef char tcad[MAX];
 
+typedef char tcad[MAX];
 typedef struct {
   long dni;
   tcad nombre;
@@ -37,6 +37,9 @@ int main(void) {
   int pos = buscardni(lista, n, dni_ingresado);
   if (pos != 0) {
     modificardni(lista, n, pos);
+    printf("Lista luego de la modificacion del dni");
+    mostrar_lista(lista, n);
+
   } else {
     printf("DNI no encontrado\n");
   }
@@ -151,5 +154,5 @@ void modificardni(tvec lista, int n, int pos) {
   } else {
     lista[pos].dni = nvo_dni;
     printf("DNI modificado correctamente.\n");
-  }  // ✅ FALTABA ESTA LLAVE
-}  // ✅ Y ESTA TAMBIÉN (la del final)
+  }
+}
