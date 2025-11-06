@@ -1,11 +1,5 @@
-//  Una plataforma de streaming necesita administrar una lista de N clientes. La
-//  información que necesita llevar de cada cliente es: DNI, Apellido, Nombre,
-//  E_Dirección, Preferencia (Series, Comedia, Terror, Acción, Románticos). Se
-//  necesita un programa modularizado que permita: cargar la lista de clientes y
-//  finalmente mostrar la lista de clientes desde la última posición hasta la
-//  primera.
-
 #include <stdio.h>
+#include <string.h>
 #define MAX 100
 typedef char tcad[MAX];
 
@@ -22,14 +16,30 @@ typedef tdcliente tvec[MAX];
 tdcliente cargar_registro();
 void cargar_lista(tvec, int*);
 void mostrar_lista(tvec, int);
+void Mostrar_Cliente(tdcliente);  // ✅ FALTABA ESTE PROTOTIPO
 void leeCad(tcad, int);
+int contarpref(tvec, int);
+int buscardni(tvec, int, long);
+void modificardni(tvec, int, int);
 
 int main(void) {
   int n;
   tvec lista;
+  long dni_ingresado;
+
   cargar_lista(lista, &n);
   mostrar_lista(lista, n);
 
+  int contador = contarpref(lista, n);
+  printf("\nla cantidad de preferencia por comedia son: %d", contador);
+  printf("\ningrese el dni a modificar: ");
+  scanf("%ld", &dni_ingresado);
+  int pos = buscardni(lista, n, dni_ingresado);
+  if (pos != 0) {
+    modificardni(lista, n, pos);
+  } else {
+    printf("DNI no encontrado\n");
+  }
   return 0;
 }
 
@@ -75,6 +85,7 @@ void cargar_lista(tvec lista, int* n) {
     lista[i] = cargar_registro();
   }
 }
+
 void Mostrar_Cliente(tdcliente Aux) {
   printf("\nDNI: %ld - Apellido y Nombre: %s, %s", Aux.dni, Aux.apellido,
          Aux.nombre);
@@ -99,6 +110,7 @@ void Mostrar_Cliente(tdcliente Aux) {
       break;
   }
 }
+
 void mostrar_lista(tvec lista, int n) {
   int i;
   printf("\n--- LISTA DE CLIENTES (INVERTIDA) ---\n");
@@ -106,3 +118,38 @@ void mostrar_lista(tvec lista, int n) {
     Mostrar_Cliente(lista[i]);
   }
 }
+
+int contarpref(tvec lista, int n) {
+  int i, cont = 0;
+  for (i = 1; i <= n; i++) {
+    if (lista[i].preferencias == 2) {
+      cont++;
+    }
+  }
+  return cont;
+}
+
+int buscardni(tvec lista, int n, long dni_ingresado) {
+  int i = 1;
+  while (i <= n && lista[i].dni != dni_ingresado) {
+    i++;
+  }
+  if (i <= n) {
+    return i;  // lo encontró
+  } else {
+    return 0;  // no está
+  }
+}
+
+void modificardni(tvec lista, int n, int pos) {
+  long nvo_dni;
+  printf("\nIngrese el nuevo DNI: ");
+  scanf("%ld", &nvo_dni);
+
+  if (buscardni(lista, n, nvo_dni) != 0) {
+    printf("Ese DNI ya existe. No se modificó.\n");
+  } else {
+    lista[pos].dni = nvo_dni;
+    printf("DNI modificado correctamente.\n");
+  }  // ✅ FALTABA ESTA LLAVE
+}  // ✅ Y ESTA TAMBIÉN (la del final)
